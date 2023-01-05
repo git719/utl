@@ -19,17 +19,15 @@ func LastElem(s, splitter string) string {
 
 func StrVal(x interface{}) string {
 	// Return the best printable string value for given x variable
-	if x != nil {
-		switch sprint("%T", x) {
-		case "bool":
-			return sprint("%t", x)
-		case "string":
-			return x.(string)
-		default:
-			return "" // Blank for other types
-		}
+	if x == nil { return "" }
+	switch sprint("%T", x) {
+	case "bool":
+		return sprint("%t", x)
+	case "string":
+		return x.(string)
+	default:
+		return "" // Blank for other types
 	}
-	return "" // Blank if nil
 }
 
 func ItemInList(arg string, argList []string) bool {
