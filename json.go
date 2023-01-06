@@ -1,9 +1,10 @@
 // json.go
 
-package chores
+package utl
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"os"
 )
@@ -31,11 +32,11 @@ func SaveFileJson(jsonObject interface{}, filePath string) {
 func PrintJson(jsonObject interface{}) {
 	pretty, err := Prettify(jsonObject)
 	if err != nil {
-		print("Prettify() error\n")
+		fmt.Printf("Prettify() error\n")
 	} else {
-		print(pretty)
+		fmt.Printf(pretty)
 	}
-	print("\n")
+	fmt.Printf("\n")
 }
 
 func Prettify(jsonObject interface{}) (pretty string, err error) {

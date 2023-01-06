@@ -1,2 +1,2 @@
-# chores
-Common housekeeping functions
+# utl
+Common utilities housekeeping functions

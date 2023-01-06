@@ -1,4 +1,4 @@
-module github.com/git719/chores
+module github.com/git719/utl
 
 go 1.19
 

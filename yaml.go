@@ -1,8 +1,9 @@
 // yaml.go
 
-package chores
+package utl
 
 import (
+	"fmt"
 	"io/ioutil"
 	"log"
 
@@ -31,6 +32,6 @@ func PrintYaml(yamlObject interface{}) {
 	if err != nil {
 		log.Println(err)
 	} else {
-		print(string(pretty))
+		fmt.Printf(string(pretty))
 	}
 }

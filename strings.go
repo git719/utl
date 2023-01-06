@@ -1,8 +1,11 @@
 // strings.go
 
-package chores
+package utl
 
-import "strings"
+import (
+	"fmt"
+	"strings"
+)
 
 func SubString(large, small string) bool {
 	// Case insensitive substring search
@@ -20,9 +23,9 @@ func LastElem(s, splitter string) string {
 func StrVal(x interface{}) string {
 	// Return the best printable string value for given x variable
 	if x == nil { return "" }
-	switch sprint("%T", x) {
+	switch VarType(x) {
 	case "bool":
-		return sprint("%t", x)
+		return fmt.Sprintf("%t", x)
 	case "string":
 		return x.(string)
 	default:
@@ -39,6 +42,6 @@ func ItemInList(arg string, argList []string) bool {
 
 func PadSpaces(n int) {
 	for i := 0; i < n; i++ {
-		print(" ")
+		fmt.Printf(" ")
 	}
 }
