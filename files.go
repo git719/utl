@@ -15,7 +15,7 @@ func RemoveFile(filePath string) {
 }
 
 func FileUsable(filePath string) (e bool) {
-	// True if file EXISTS && has SOME content && is less than 30 days old
+	// True if file EXISTS && has SOME content 
 	if FileExist(filePath) && FileSize(filePath) > 0 {
 		return true
 	}
