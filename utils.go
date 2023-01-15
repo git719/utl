@@ -9,6 +9,30 @@ import (
 	"runtime"
 )
 
+var (
+	// Some basic colors
+	Red = "\033[1;31m"
+	Gre = "\033[0;32m"
+	Blu = "\033[1;34m"
+	Yel = "\033[0;33m"
+	Pur = "\033[1;35m"
+	Cya = "\033[0;36m"
+	Rst = "\033[0m"
+)
+
+func init() {
+	if runtime.GOOS == "windows" {
+		// Windows doesn't like above escape sequences
+		Red = ""
+		Gre = ""
+		Blu = ""
+		Yel = ""
+		Pur = ""
+		Cya = ""
+		Rst = ""
+	}
+}
+
 func Die(format string, args ...interface{}) {
 	fmt.Printf(format, args...) // Same as print function but does not return
 	os.Exit(1)                  // Always exit with return code 1
