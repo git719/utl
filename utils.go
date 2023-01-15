@@ -33,6 +33,30 @@ func init() {
 	}
 }
 
+func ColRed(s string) string {
+	return Red + s + Rst
+}
+
+func ColGre(s string) string {
+	return Gre + s + Rst
+}
+
+func ColBlu(s string) string {
+	return Blu + s + Rst
+}
+
+func ColYel(s string) string {
+	return Yel + s + Rst
+}
+
+func ColPur(s string) string {
+	return Pur + s + Rst
+}
+
+func ColCya(s string) string {
+	return Cya + s + Rst
+}
+
 func Die(format string, args ...interface{}) {
 	fmt.Printf(format, args...) // Same as print function but does not return
 	os.Exit(1)                  // Always exit with return code 1
