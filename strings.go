@@ -20,7 +20,7 @@ func LastElem(s, splitter string) string {
 	return split[len(split)-1]          // Return last element
 }
 
-func Strv(x interface{}) string {
+func Str(x interface{}) string {
 	// Return the best printable string value for given x variable
 	if x == nil {
 		return ""
