@@ -23,7 +23,7 @@ func LastElem(s, splitter string) string {
 func StrVal(x interface{}) string {
 	// Return the best printable string value for given x variable
 	if x == nil { return "" }
-	switch VarType(x) {
+	switch GetType(x) {
 	case "bool":
 		return fmt.Sprintf("%t", x)
 	case "string":

@@ -6,7 +6,6 @@ import (
 	"os"
 	"fmt"
 	"runtime"
-
 	"github.com/google/uuid"
 )
 
@@ -37,7 +36,7 @@ func SameType(a, b interface{}) bool {
 	return a_type == b_type
 }
 
-func VarType(v interface{}) string {
+func GetType(v interface{}) string {
 	return fmt.Sprintf("%T", v)
 }
 
