@@ -20,9 +20,11 @@ func LastElem(s, splitter string) string {
 	return split[len(split)-1]          // Return last element
 }
 
-func StrVal(x interface{}) string {
+func Strv(x interface{}) string {
 	// Return the best printable string value for given x variable
-	if x == nil { return "" }
+	if x == nil {
+		return ""
+	}
 	switch GetType(x) {
 	case "bool":
 		return fmt.Sprintf("%t", x)
@@ -35,7 +37,9 @@ func StrVal(x interface{}) string {
 
 func ItemInList(arg string, argList []string) bool {
 	for _, value := range argList {
-		if value == arg { return true }
+		if value == arg {
+			return true
+		}
 	}
 	return false
 }

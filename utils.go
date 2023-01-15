@@ -3,24 +3,28 @@
 package utl
 
 import (
-	"os"
 	"fmt"
-	"runtime"
 	"github.com/google/uuid"
+	"os"
+	"runtime"
 )
 
 func Die(format string, args ...interface{}) {
-	fmt.Printf(format, args...)  // Same as print function but does not return
-	os.Exit(1)                   // Always exit with return code 1
+	fmt.Printf(format, args...) // Same as print function but does not return
+	os.Exit(1)                  // Always exit with return code 1
 }
 
-func Trace() (string) {
+func Trace() string {
 	// Return string showing current "File_path [line number] function_name"
 	// https://stackoverflow.com/questions/25927660/how-to-get-the-current-function-name
-    progCounter, fp, ln, ok := runtime.Caller(1)
-    if !ok { return fmt.Sprintf("%s\n    %s:%d\n", "?", "?", 0) }
-    funcPointer := runtime.FuncForPC(progCounter)
-    if funcPointer == nil { return fmt.Sprintf("%s\n    %s:%d\n", "?", fp, ln) }
+	progCounter, fp, ln, ok := runtime.Caller(1)
+	if !ok {
+		return fmt.Sprintf("%s\n    %s:%d\n", "?", "?", 0)
+	}
+	funcPointer := runtime.FuncForPC(progCounter)
+	if funcPointer == nil {
+		return fmt.Sprintf("%s\n    %s:%d\n", "?", fp, ln)
+	}
 	return fmt.Sprintf("%s\n    %s:%d\n", funcPointer.Name(), fp, ln)
 }
 
@@ -39,4 +43,3 @@ func SameType(a, b interface{}) bool {
 func GetType(v interface{}) string {
 	return fmt.Sprintf("%T", v)
 }
-
