@@ -91,3 +91,10 @@ func SameType(a, b interface{}) bool {
 func GetType(v interface{}) string {
 	return fmt.Sprintf("%T", v)
 }
+
+func IsHexDigit(c rune) bool {
+	if ('0' <= c && c <= '9') || ('a' <= c && c <= 'f') || ('A' <= c && c <= 'F') {
+		return true
+	}
+	return false
+}
