@@ -3,16 +3,23 @@
 package utl
 
 import (
-	"github.com/fatih/color"
+	"github.com/gookit/color"
 )
 
 var (
-	Gra = color.New(color.FgWhite).SprintFunc()
-	Whi = color.New(color.FgWhite, color.Bold).SprintFunc()
-	Red = color.New(color.FgRed, color.Bold).SprintFunc()
-	Blu = color.New(color.FgBlue, color.Bold).SprintFunc()
-	Pur = color.New(color.FgMagenta, color.Bold).SprintFunc()
-	Gre = color.New(color.FgGreen).SprintFunc()
-	Yel = color.New(color.FgYellow).SprintFunc()
-	Cya = color.New(color.FgCyan).SprintFunc()
+	Red  = color.FgLightRed.Render
+	Blu  = color.FgLightBlue.Render
+	Gre  = color.FgGreen.Render
+	Yel  = color.FgYellow.Render
+	Whi  = color.FgWhite.Render
+	Cya  = color.FgCyan.Render
+	Mag  = color.FgLightMagenta.Render
+	Gra  = color.FgDarkGray.Render
+	Red2 = color.FgRed.Render
+	Blu2 = color.FgBlue.Render
+	Gre2 = color.FgLightGreen.Render
+	Yel2 = color.FgLightYellow.Render
+	Whi2 = color.FgLightWhite.Render
+	Cya2 = color.FgLightCyan.Render
+	Mag2 = color.FgMagenta.Render
 )
