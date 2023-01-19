@@ -53,14 +53,14 @@ func IsHexDigit(c rune) bool {
 }
 
 func SortStringMapByKeys(inMap map[string]string) (sortedMap map[string]string) {
-    keys := make([]string, 0, len(inMap))
-    for k := range inMap {
-        keys = append(keys, k)
-    }
-    sort.Strings(keys)
-    sortedMap = make(map[string]string, len(inMap))
-    for _, k := range keys {
-        sortedMap[k] = inMap[k]
-    }
-    return sortedMap
+	keys := make([]string, 0, len(inMap))
+	for k := range inMap {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+	sortedMap = make(map[string]string, len(inMap))
+	for _, k := range keys {
+		sortedMap[k] = inMap[k]
+	}
+	return sortedMap
 }
