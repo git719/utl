@@ -3,6 +3,7 @@
 package utl
 
 import (
+	"bufio"
 	"fmt"
 	"github.com/google/uuid"
 	"os"
@@ -63,4 +64,15 @@ func SortStringMapByKeys(inMap map[string]string) (sortedMap map[string]string) 
 		sortedMap[k] = inMap[k]
 	}
 	return sortedMap
+}
+
+func PromptMsg(msg string) rune {
+	// Print prompt message and return single rune character input
+	fmt.Print(Yel(msg))
+	reader := bufio.NewReader(os.Stdin)
+	confirm, _, err := reader.ReadRune()
+	if err != nil {
+		fmt.Println(err)
+	}
+	return confirm
 }
