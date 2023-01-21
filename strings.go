@@ -44,8 +44,13 @@ func ItemInList(arg string, argList []string) bool {
 	return false
 }
 
-func PadSpaces(n int) {
-	for i := 0; i < n; i++ {
-		fmt.Printf(" ")
+func PadSpaces(targetWidth, stringWidth int) string {
+	// Return string of spaces for padded printing. Needed when printing terminal colors.
+	// Colorize output uses % sequences that conflict with Printf's own formatting with %
+	padding := targetWidth - stringWidth
+	if padding > 0 {
+		return fmt.Sprintf("%*s", padding, " ")
+	} else {
+		return ""
 	}
 }
