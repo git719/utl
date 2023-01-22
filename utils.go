@@ -53,17 +53,24 @@ func IsHexDigit(c rune) bool {
 	return false
 }
 
-func SortStringMapByKeys(inMap map[string]string) (sortedMap map[string]string) {
-	keys := make([]string, 0, len(inMap))
-	for k := range inMap {
-		keys = append(keys, k)
+// TODO: Combine below two func with interfaces
+func SortMapStringKeys(obj map[string]string) (sortedKeys []string) {
+	// Return the map string object's keys sorted
+	sortedKeys = make([]string, 0, len(obj))
+	for k := range obj {
+		sortedKeys = append(sortedKeys, k)
 	}
-	sort.Strings(keys)
-	sortedMap = make(map[string]string, len(inMap))
-	for _, k := range keys {
-		sortedMap[k] = inMap[k]
+	sort.Strings(sortedKeys)
+	return sortedKeys
+}
+func SortObjStringKeys(obj map[string]interface{}) (sortedKeys []string) {
+	// Return the object's keys sorted
+	sortedKeys = make([]string, 0, len(obj))
+	for k := range obj {
+		sortedKeys = append(sortedKeys, k)
 	}
-	return sortedMap
+	sort.Strings(sortedKeys)
+	return sortedKeys
 }
 
 func PromptMsg(msg string) rune {
