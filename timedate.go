@@ -9,7 +9,7 @@ import (
 )
 
 func IsDate(dateString, expectedFormat string) bool {
-	// Check if string is a valid yyyy-mm-dd date format
+	// Check if string is a valid date in expectedFormat
 	_, err := time.Parse(expectedFormat, dateString)
 	if err != nil {
 		return false

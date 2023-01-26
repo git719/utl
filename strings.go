@@ -20,6 +20,21 @@ func LastElem(s, splitter string) string {
 	return split[len(split)-1]          // Return last element
 }
 
+func FirstN(s string, n int) string {
+	// Return first N characters of string n
+	if len(s) <= n {
+		return s
+	}
+	i := 0
+	for j := range s {
+		if i == n {
+			return s[:j]
+		}
+		i++
+	}
+	return s
+}
+
 func Str(x interface{}) string {
 	// Return the best printable string value for given x variable
 	if x == nil {
