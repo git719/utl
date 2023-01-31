@@ -8,8 +8,10 @@ import (
 	"time"
 )
 
-func IsDate(dateString, expectedFormat string) bool {
+func ValidDate(dateString, expectedFormat string) bool {
 	// Check if string is a valid date in expectedFormat
+	// References:
+	// - https://pkg.go.dev/time
 	_, err := time.Parse(expectedFormat, dateString)
 	if err != nil {
 		return false
