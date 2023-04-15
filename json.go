@@ -47,6 +47,7 @@ func PrintJson(jsonObject interface{}) {
 		fmt.Printf(pretty)
 	}
 	fmt.Printf("\n")
+	os.Stdout.Sync() // Flush the output buffer
 }
 
 func Prettify(jsonObject interface{}) (pretty string, err error) {

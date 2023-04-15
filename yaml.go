@@ -4,10 +4,10 @@ package utl
 
 import (
 	"fmt"
+	"gopkg.in/yaml.v3"
 	"io/ioutil"
 	"log"
-
-	"gopkg.in/yaml.v3"
+	"os"
 )
 
 func LoadFileYaml(filePath string) (yamlObject interface{}, err error) {
@@ -42,4 +42,5 @@ func PrintYaml(yamlObject interface{}) {
 	} else {
 		fmt.Printf(string(pretty))
 	}
+	os.Stdout.Sync() // Flush the output buffer
 }
