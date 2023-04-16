@@ -3,7 +3,6 @@
 package utl
 
 import (
-	"fmt"
 	"gopkg.in/yaml.v3"
 	"io/ioutil"
 	"log"
@@ -36,11 +35,13 @@ func SaveFileYaml(yamlObject interface{}, filePath string) {
 }
 
 func PrintYaml(yamlObject interface{}) {
-	pretty, err := yaml.Marshal(&yamlObject)
+	encoder := yaml.NewEncoder(os.Stdout)
+	encoder.SetIndent(2) // Set the indentation to 2 spaces
+
+	err := encoder.Encode(&yamlObject)
 	if err != nil {
 		log.Println(err)
 	} else {
-		fmt.Printf(string(pretty))
+		os.Stdout.Sync() // Flush the output buffer
 	}
-	os.Stdout.Sync() // Flush the output buffer
 }
