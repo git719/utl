@@ -8,23 +8,20 @@ import (
 	"time"
 )
 
-func ValidDate(dateString, expectedFormat string) bool {
-	// Check if string is a valid date in expectedFormat
-	// References:
-	// - https://pkg.go.dev/time
-	_, err := time.Parse(expectedFormat, dateString)
-	if err != nil {
-		return false
+func IntAbs(x int) int {
+	// Return absolute value of int value
+	if x < 0 {
+		return -x
 	}
-	return true
+	return x
 }
 
-func IntAbs(val int64) int64 {
+func Int64Abs(x int64) int64 {
 	// Return absolute value of int64 value
-	if val < 0 {
-		return -val
+	if x < 0 {
+		return -x
 	}
-	return val
+	return x
 }
 
 func StringToInt64(s string) (int64, error) {
@@ -36,7 +33,22 @@ func StringToInt64(s string) (int64, error) {
 	return i, nil
 }
 
-func EpocIntToTime(epocInt int64) time.Time {
+func Int64ToString(i int64) string {
+	// Convert int64 number to string
+	return strconv.FormatInt(i, 10)
+}
+
+func ValidDate(dateString, expectedFormat string) bool {
+	// Check if string is a valid date in expectedFormat
+	// Reference: https://pkg.go.dev/time
+	_, err := time.Parse(expectedFormat, dateString)
+	if err != nil {
+		return false
+	}
+	return true
+}
+
+func EpocInt64ToTime(epocInt int64) time.Time {
 	// Convert Unix epoc seconds string to Time type
 	return time.Unix(epocInt, 0)
 }
@@ -47,25 +59,25 @@ func EpocStringToTime(epocString string) (time.Time, error) {
 	return time.Unix(epocInt64, 0), err
 }
 
-func ConvertDateFormat(dateString, fromFormat, toFormat string) (string, error) {
-	// Converts dateString from fromFormat to toFormat
-	t, err := time.Parse(fromFormat, dateString)
+func ConvertDateFormat(dateString, srcFormat, dstFormat string) (string, error) {
+	// Converts dateString from srcFormat to dstFormat
+	t, err := time.Parse(srcFormat, dateString)
 	if err != nil {
 		return "", err
 	}
-	return t.Format(toFormat), nil
+	return t.Format(dstFormat), nil
 }
 
 func DateStringToEpocInt64(dateString, dateFormat string) (int64, error) {
 	// Convert dateString, given in dateFormat, to Unix Epoc seconds int64
 	t, err := time.Parse(dateFormat, dateString) // First, convert string to Time
 	if err != nil {
-		panic(err.Error())
+		return 0, err
 	}
 	return t.Unix(), nil // Finally, convert Time type to Unix epoc seconds
 }
 
-func PrintDateInDays(days string) {
+func GetDateInDays(days string) time.Time {
 	// Print yyyy-mm-dd date for given number of +/- days in future or past
 	now := time.Now().Unix()
 	daysInt64, err := StringToInt64(days)
@@ -73,47 +85,73 @@ func PrintDateInDays(days string) {
 		panic(err.Error())
 	}
 	now += (daysInt64 * 86400) // 86400 seconds in a day
-	date1 := EpocIntToTime(now)
-	fmt.Println(date1.Format("2006-01-02"))
+	return EpocInt64ToTime(now)
+}
+
+func IsLeapYear(year int64) bool {
+	return year%4 == 0 && (year%100 != 0 || year%400 == 0)
+}
+
+func GetDaysSinceOrTo(date1 string) int64 {
+	// Calculate and return number of +/- days from NOW to date given
+	// Note: Calculations are all in UTC time
+	// Takes leap year into account.
+	start, err := time.Parse("2006-01-02", date1)
+	if err != nil {
+		panic(err.Error())
+	}
+
+	end := time.Now().UTC()
+
+	var days int64 = 0
+	var sign int64 = -1
+
+	if start.After(end) {
+		start, end = end, start
+		sign = 1
+	}
+
+	for start.Year() < end.Year() || (start.Year() == end.Year() && start.YearDay() < end.YearDay()) {
+		days++
+		start = start.AddDate(0, 0, 1)
+
+		// Adjust for leap years
+		if start.Month() == time.February && start.Day() == 28 && IsLeapYear(int64(start.Year())) {
+			days++
+			start = start.AddDate(0, 0, 1)
+		}
+	}
+
+	return sign * days
 }
 
 func PrintDays(days int64) {
-	days_abs := IntAbs(days)
-	if days_abs > 365 {
-		years := days_abs / 365
-		modulus := days_abs % 365
-		fmt.Printf("%d (%d years + %d days)\n", days, years, modulus)
+	// Print number of days, also in years and days
+	days_abs := Int64Abs(days)
+	var years int64 = 0
+
+	for days_abs >= 365 {
+		leap := int64(0)
+		if IsLeapYear(years) {
+			leap = 1
+		}
+		if days_abs >= (365 + leap) {
+			days_abs -= (365 + leap)
+			years++
+		} else {
+			break
+		}
+	}
+
+	if years > 0 {
+		fmt.Printf("%d (%d years + %d days)\n", days, years, days_abs)
 	} else {
 		fmt.Println(days)
 	}
 }
 
-func PrintDaysSinceOrTo(date1 string) {
-	// Calculate and print number of +/- days from NOW to date given
-	// Note: Calculations are all in UTC time
-	epoc1, err := DateStringToEpocInt64(date1, "2006-01-02")
-	if err != nil {
-		panic(err.Error())
-	}
-
-	now := time.Now()
-	now_secs := now.Unix()
-
-	// Get today's epoc time at midnight UTC
-	today := now.Format("2006-01-02")
-	t, err := time.Parse("2006-01-02", today) // First, convert string to Time
-	if err != nil {
-		panic(err.Error())
-	}
-	midnight_secs := t.Unix()
-
-	since_midnight := now_secs - midnight_secs
-	epoc1 = epoc1 + since_midnight
-	PrintDays((epoc1 - now_secs) / 86400)
-}
-
-func PrintDaysBetween(date1, date2 string) {
-	// Calculate and print number of days between 2 dates
+func GetDaysBetween(date1, date2 string) int64 {
+	// Return number of days between 2 dates
 	epoc1, err := DateStringToEpocInt64(date1, "2006-01-02")
 	if err != nil {
 		panic(err.Error())
@@ -122,11 +160,6 @@ func PrintDaysBetween(date1, date2 string) {
 	if err != nil {
 		panic(err.Error())
 	}
-	if epoc1 > epoc2 {
-		PrintDays((epoc1 - epoc2) / 86400)
-	} else if epoc2 > epoc1 {
-		PrintDays((epoc2 - epoc1) / 86400)
-	} else {
-		fmt.Println(0)
-	}
+
+	return (Int64Abs(epoc1-epoc2) / 86400)
 }
