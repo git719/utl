@@ -116,7 +116,7 @@ func colorizeString(tk *token.Token, src string) string {
 	case token.AnchorType, token.AliasType:
 		str = Yel(src)
 	case token.CommentType:
-		str = Gra(src)
+		str = Whi(src)
 	}
 	return str
 }
