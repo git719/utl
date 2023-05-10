@@ -3,10 +3,12 @@
 package utl
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"os"
+	"strings"
 )
 
 func LoadFileJson(filePath string) (jsonObject interface{}, err error) {
@@ -50,9 +52,53 @@ func PrintJson(jsonObject interface{}) {
 	os.Stdout.Sync() // Flush the output buffer
 }
 
+func JsonBytesReindent(jsonBytes []byte, indent int) (jsonBytes2 []byte, err error) {
+	var prettyJson bytes.Buffer
+	indentStr := strings.Repeat(" ", indent)
+	err = json.Indent(&prettyJson, jsonBytes, "", indentStr)
+	if err != nil {
+		return nil, err
+	}
+	jsonBytes2 = prettyJson.Bytes()
+	return jsonBytes2, nil
+}
+
+func JsonToBytesIndent(jsonObject interface{}, indent int) (jsonBytes []byte, err error) {
+	// Convert JSON interface object to byte slice, with option indent spacing
+	indentStr := strings.Repeat(" ", indent)
+	jsonBytes, err = json.MarshalIndent(jsonObject, "", indentStr)
+	if err != nil {
+		return nil, err
+	}
+	return jsonBytes, nil
+}
+
+func JsonToBytes(jsonObject interface{}) (jsonBytes []byte, err error) {
+	// Convert JSON interface object to byte slice, with default 2-space indentation
+	indent := 2 // With default 2 space indent
+	jsonBytes, err = JsonToBytesIndent(jsonObject, indent)
+	return jsonBytes, err
+}
+
 func Prettify(jsonObject interface{}) (pretty string, err error) {
+	// NOTE: To be replaced by JsonToBytes()
 	j, err := json.MarshalIndent(jsonObject, "", "  ")
 	return string(j), err
+}
+
+func PrintJsonColor(jsonObject interface{}) {
+	// Print JSON object in color
+	jsonBytes, err := JsonToBytes(jsonObject)
+	if err != nil {
+		fmt.Println(err.Error())
+		return
+	}
+	PrintJsonBytesColor(jsonBytes)
+}
+
+func PrintJsonBytesColor(jsonBytes []byte) {
+	// Prints JSON byte slice in color. Just an alias of yaml.go:PrintYamlBytesColor().
+	PrintYamlBytesColor(jsonBytes)
 }
 
 func MergeMaps(m1, m2 map[string]string) (result map[string]string) {
