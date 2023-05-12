@@ -50,6 +50,10 @@ func Str(x interface{}) string {
 	}
 }
 
+func ToStr(value interface{}) string {
+	return fmt.Sprintf("%v", value)
+}
+
 func ItemInList(arg string, argList []string) bool {
 	for _, value := range argList {
 		if value == arg {
@@ -67,5 +71,29 @@ func PadSpaces(targetWidth, stringWidth int) string {
 		return fmt.Sprintf("%*s", padding, " ")
 	} else {
 		return ""
+	}
+}
+
+func PreSpc(value interface{}, width int) string {
+	// Return value as a string, padded with leading spaces, totalling width
+	// Needed when printing terminal colors, because they conflict with Printf's own '%' formatting
+	str := ToStr(value)
+	padding := width - len(str)
+	if padding > 0 {
+		return fmt.Sprintf("%*s%s", padding, " ", str)
+	} else {
+		return str
+	}
+}
+
+func PostSpc(value interface{}, width int) string {
+	// Return value as a string, padded with trailing spaces, totalling width
+	// Needed when printing terminal colors, because they conflict with Printf's own '%' formatting
+	str := ToStr(value)
+	padding := width - len(str)
+	if padding > 0 {
+		return fmt.Sprintf("%s%*s", str, padding, " ")
+	} else {
+		return str
 	}
 }
