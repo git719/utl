@@ -46,6 +46,20 @@ func GetType(v interface{}) string {
 	return fmt.Sprintf("%T", v)
 }
 
+func IsAlpha(c rune) bool {
+	if ('a' <= c && c <= 'z') || ('A' <= c && c <= 'Z') {
+		return true
+	}
+	return false
+}
+
+func IsDigit(c rune) bool {
+	if '0' <= c && c <= '9' {
+		return true
+	}
+	return false
+}
+
 func IsHexDigit(c rune) bool {
 	if ('0' <= c && c <= '9') || ('a' <= c && c <= 'f') || ('A' <= c && c <= 'F') {
 		return true
