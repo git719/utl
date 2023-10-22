@@ -4,6 +4,7 @@ package utl
 
 import (
 	"bytes"
+	"compress/gzip"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -12,7 +13,7 @@ import (
 )
 
 func LoadFileJson(filePath string) (jsonObject interface{}, err error) {
-	// Read/load/decode given filePath as some JSON object
+	// Read/load/decode text JSON object file
 	f, err := os.Open(filePath)
 	if err != nil {
 		return nil, err
@@ -29,13 +30,61 @@ func LoadFileJson(filePath string) (jsonObject interface{}, err error) {
 	return jsonObject, nil
 }
 
+func LoadFileJsonGzip(filePath string) (jsonObject interface{}, err error) {
+	// Read/load/decode gzipped JSON object file
+	f, err := os.Open(filePath)
+	if err != nil {
+		return nil, err
+	}
+	defer f.Close()
+
+	gzipReader, err := gzip.NewReader(f)
+	if err != nil {
+		return nil, err
+	}
+	defer gzipReader.Close()
+
+	byteValue, err := ioutil.ReadAll(gzipReader)
+	if err != nil {
+		return nil, err
+	}
+
+	err = json.Unmarshal([]byte(byteValue), &jsonObject)
+	if err != nil {
+		return nil, err
+	}
+
+	return jsonObject, nil
+}
+
 func SaveFileJson(jsonObject interface{}, filePath string) {
-	// Save given JSON object to given filePath
+	// Save given JSON object as text file
 	jsonData, err := json.Marshal(jsonObject)
 	if err != nil {
 		panic(err.Error())
 	}
 	err = ioutil.WriteFile(filePath, jsonData, 0600)
+	if err != nil {
+		panic(err.Error())
+	}
+}
+func SaveFileJsonGzip(jsonObject interface{}, filePath string) {
+	// Save given JSON object as gzipped file
+	jsonData, err := json.Marshal(jsonObject)
+	if err != nil {
+		panic(err.Error())
+	}
+
+	file, err := os.Create(filePath)
+	if err != nil {
+		panic(err.Error())
+	}
+	defer file.Close()
+
+	gzipWriter := gzip.NewWriter(file)
+	defer gzipWriter.Close()
+
+	_, err = gzipWriter.Write(jsonData)
 	if err != nil {
 		panic(err.Error())
 	}

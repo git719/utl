@@ -4,6 +4,7 @@ package utl
 
 import (
 	"os"
+	"time"
 )
 
 func RemoveFile(filePath string) {
@@ -51,4 +52,13 @@ func FileModTime(filePath string) int {
 		return 0
 	}
 	return int(f.ModTime().Unix())
+}
+
+func FileAge(filePath string) int64 {
+	// Return file age in seconds
+	if FileUsable(filePath) {
+		fileEpoc := int64(FileModTime(filePath))
+		return int64(time.Now().Unix()) - fileEpoc
+	}
+	return int64(0)
 }

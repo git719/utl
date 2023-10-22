@@ -4,6 +4,7 @@ package utl
 
 import (
 	"net"
+	"net/http"
 	"time"
 )
 
@@ -20,4 +21,13 @@ func IsIpPortStrReachable(ipPortStr string) bool {
 	}
 	defer conn.Close()
 	return true
+}
+
+func InternetIsAvailable() bool {
+	_, err := http.Get("http://httpbin.org/ip")
+	return err == nil
+}
+
+func InternetNotAvailable() bool {
+	return !InternetIsAvailable()
 }
