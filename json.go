@@ -180,3 +180,24 @@ func MergeObjects(x, y map[string]interface{}) (obj map[string]interface{}) {
 	}
 	return obj
 }
+
+func StringInJson(jsonObject interface{}, filter string) bool {
+	// Recursive function returns True if filter string value is anywhere within jsonObject
+	switch value := jsonObject.(type) {
+	case string:
+		return SubString(value, filter)
+	case []interface{}:
+		for _, v := range value {
+			if StringInJson(v, filter) {
+				return true
+			}
+		}
+	case map[string]interface{}:
+		for _, v := range value {
+			if StringInJson(v, filter) {
+				return true
+			}
+		}
+	}
+	return false
+}
