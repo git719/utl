@@ -50,6 +50,17 @@ func Str(x interface{}) string {
 	}
 }
 
+func StrSingleQuoteGreen(x interface{}) string {
+	// Returns string value of unknown variable, wrapped in single quotes, in green color
+	// Special function to lookout for leading '*' which must be single-quoted
+	s := Str(x)
+	sGreen := Gre(s)
+	if strings.HasPrefix(s, "*") {
+		return "'" + sGreen + "'"
+	}
+	return sGreen
+}
+
 func ToStr(value interface{}) string {
 	return fmt.Sprintf("%v", value)
 }

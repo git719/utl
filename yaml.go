@@ -5,12 +5,13 @@ package utl
 import (
 	"bytes"
 	"fmt"
+	"io/ioutil"
+	"strings"
+
 	goyaml "github.com/goccy/go-yaml"
 	"github.com/goccy/go-yaml/lexer"
 	"github.com/goccy/go-yaml/token"
 	"gopkg.in/yaml.v3"
-	"io/ioutil"
-	"strings"
 )
 
 func SaveFileYaml(yamlObject interface{}, filePath string) {
