@@ -129,6 +129,12 @@ func JsonToBytes(jsonObject interface{}) (jsonBytes []byte, err error) {
 	return jsonBytes, err
 }
 
+func JsonBytesToJsonObj(jsonBytes []byte) (jsonObject interface{}, err error) {
+	// Convert JSON byte slice to JSON interface object, with default 2-space indentation
+	err = json.Unmarshal(jsonBytes, &jsonObject)
+	return jsonObject, err
+}
+
 func Prettify(jsonObject interface{}) (pretty string, err error) {
 	// NOTE: To be replaced by JsonToBytes()
 	j, err := json.MarshalIndent(jsonObject, "", "  ")
