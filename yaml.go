@@ -5,7 +5,7 @@ package utl
 import (
 	"bytes"
 	"fmt"
-	"io/ioutil"
+	"os"
 	"strings"
 
 	goyaml "github.com/goccy/go-yaml"
@@ -14,21 +14,9 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-func SaveFileYaml(yamlObject interface{}, filePath string) {
-	// Save given YAML object to given filePath
-	yamlData, err := yaml.Marshal(&yamlObject)
-	if err != nil {
-		panic(err.Error())
-	}
-	err = ioutil.WriteFile(filePath, yamlData, 0600)
-	if err != nil {
-		panic(err.Error())
-	}
-}
-
 func LoadFileYaml(filePath string) (yamlObject interface{}, err error) {
 	// Read/load/decode given filePath as some YAML object
-	fileContent, err := ioutil.ReadFile(filePath)
+	fileContent, err := os.ReadFile(filePath)
 	if err != nil {
 		return nil, err
 	}
@@ -42,7 +30,7 @@ func LoadFileYaml(filePath string) (yamlObject interface{}, err error) {
 func LoadFileYamlBytes(filePath string) (yamlBytes []byte, err error) {
 	// Load YAML file into byte slice, including comments
 	// Can also JSON file into byte slice!
-	yamlBytes, err = ioutil.ReadFile(filePath)
+	yamlBytes, err = os.ReadFile(filePath)
 	if err != nil {
 		return nil, err
 	}
@@ -54,6 +42,18 @@ func LoadFileYamlBytes(filePath string) (yamlBytes []byte, err error) {
 		return nil, err
 	}
 	return yamlBytes, nil // We only care about returning the byte slice
+}
+
+func SaveFileYaml(yamlObject interface{}, filePath string) {
+	// Save given YAML object to given filePath
+	yamlData, err := yaml.Marshal(&yamlObject)
+	if err != nil {
+		panic(err.Error())
+	}
+	err = os.WriteFile(filePath, yamlData, 0600)
+	if err != nil {
+		panic(err.Error())
+	}
 }
 
 func BytesToYamlObject(yamlBytes []byte) (yamlObject interface{}, err error) {

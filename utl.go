@@ -5,10 +5,11 @@ package utl
 import (
 	"bufio"
 	"fmt"
-	"github.com/google/uuid"
 	"os"
 	"runtime"
 	"sort"
+
+	"github.com/google/uuid"
 )
 
 func Die(format string, args ...interface{}) {

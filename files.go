@@ -7,6 +7,22 @@ import (
 	"time"
 )
 
+func LoadFileText(filePath string) (rawBytes []byte, err error) {
+	rawBytes, err = os.ReadFile(filePath)
+	if err != nil {
+		return nil, err
+	}
+	return rawBytes, nil
+}
+
+func SaveFileText(filePath string, rawBytes []byte) error {
+	err := os.WriteFile(filePath, rawBytes, 0644)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func RemoveFile(filePath string) {
 	if FileExist(filePath) {
 		if err := os.Remove(filePath); err != nil {

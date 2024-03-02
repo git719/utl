@@ -7,7 +7,7 @@ import (
 	"compress/gzip"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"os"
 	"strings"
 )
@@ -19,7 +19,7 @@ func LoadFileJson(filePath string) (jsonObject interface{}, err error) {
 		return nil, err
 	}
 	defer f.Close()
-	byteValue, err := ioutil.ReadAll(f)
+	byteValue, err := io.ReadAll(f)
 	if err != nil {
 		return nil, err
 	}
@@ -44,7 +44,7 @@ func LoadFileJsonGzip(filePath string) (jsonObject interface{}, err error) {
 	}
 	defer gzipReader.Close()
 
-	byteValue, err := ioutil.ReadAll(gzipReader)
+	byteValue, err := io.ReadAll(gzipReader)
 	if err != nil {
 		return nil, err
 	}
@@ -63,7 +63,7 @@ func SaveFileJson(jsonObject interface{}, filePath string) {
 	if err != nil {
 		panic(err.Error())
 	}
-	err = ioutil.WriteFile(filePath, jsonData, 0600)
+	err = os.WriteFile(filePath, jsonData, 0600)
 	if err != nil {
 		panic(err.Error())
 	}

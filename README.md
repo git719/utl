@@ -1,3 +1,3 @@
-# utl
-Common utilities housekeeping functions
+## utl
+Common housekeeping functions library.
 
