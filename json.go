@@ -1,5 +1,3 @@
-// json.go
-
 package utl
 
 import (
@@ -12,8 +10,9 @@ import (
 	"strings"
 )
 
+// Reads, load, and decode given filePath as a JSON object text file.
+// Returns JSON object and err if any.
 func LoadFileJson(filePath string) (jsonObject interface{}, err error) {
-	// Read/load/decode text JSON object file
 	f, err := os.Open(filePath)
 	if err != nil {
 		return nil, err
@@ -30,8 +29,10 @@ func LoadFileJson(filePath string) (jsonObject interface{}, err error) {
 	return jsonObject, nil
 }
 
+// Reads, load, and decode given filePath as a gzipped JSON object text file.
+// Returns JSON object and err if any.
+// The compression helps speed things up for some very large objects.
 func LoadFileJsonGzip(filePath string) (jsonObject interface{}, err error) {
-	// Read/load/decode gzipped JSON object file
 	f, err := os.Open(filePath)
 	if err != nil {
 		return nil, err
@@ -57,8 +58,8 @@ func LoadFileJsonGzip(filePath string) (jsonObject interface{}, err error) {
 	return jsonObject, nil
 }
 
+// Save given JSON object as text file
 func SaveFileJson(jsonObject interface{}, filePath string) {
-	// Save given JSON object as text file
 	jsonData, err := json.Marshal(jsonObject)
 	if err != nil {
 		panic(err.Error())
@@ -68,8 +69,9 @@ func SaveFileJson(jsonObject interface{}, filePath string) {
 		panic(err.Error())
 	}
 }
+
+// Save given JSON object as gzipped text file
 func SaveFileJsonGzip(jsonObject interface{}, filePath string) {
-	// Save given JSON object as gzipped file
 	jsonData, err := json.Marshal(jsonObject)
 	if err != nil {
 		panic(err.Error())
@@ -90,17 +92,18 @@ func SaveFileJsonGzip(jsonObject interface{}, filePath string) {
 	}
 }
 
+// Prints JSON object, flushing the output buffer
 func PrintJson(jsonObject interface{}) {
 	pretty, err := Prettify(jsonObject)
 	if err != nil {
 		fmt.Printf("Prettify() error\n")
 	} else {
-		fmt.Printf(pretty)
+		fmt.Println(pretty)
 	}
-	fmt.Printf("\n")
-	os.Stdout.Sync() // Flush the output buffer
+	os.Stdout.Sync()
 }
 
+// Convert JSON interface object to byte slice, with option to indent spacing
 func JsonBytesReindent(jsonBytes []byte, indent int) (jsonBytes2 []byte, err error) {
 	var prettyJson bytes.Buffer
 	indentStr := strings.Repeat(" ", indent)
@@ -112,8 +115,8 @@ func JsonBytesReindent(jsonBytes []byte, indent int) (jsonBytes2 []byte, err err
 	return jsonBytes2, nil
 }
 
+// Convert JSON interface object to byte slice, with option to indent spacing
 func JsonToBytesIndent(jsonObject interface{}, indent int) (jsonBytes []byte, err error) {
-	// Convert JSON interface object to byte slice, with option indent spacing
 	indentStr := strings.Repeat(" ", indent)
 	jsonBytes, err = json.MarshalIndent(jsonObject, "", indentStr)
 	if err != nil {
@@ -122,27 +125,27 @@ func JsonToBytesIndent(jsonObject interface{}, indent int) (jsonBytes []byte, er
 	return jsonBytes, nil
 }
 
+// Convert JSON interface object to byte slice, with default 2-space indentation
 func JsonToBytes(jsonObject interface{}) (jsonBytes []byte, err error) {
-	// Convert JSON interface object to byte slice, with default 2-space indentation
 	indent := 2 // With default 2 space indent
 	jsonBytes, err = JsonToBytesIndent(jsonObject, indent)
 	return jsonBytes, err
 }
 
+// Convert JSON byte slice to JSON interface object, with default 2-space indentation
 func JsonBytesToJsonObj(jsonBytes []byte) (jsonObject interface{}, err error) {
-	// Convert JSON byte slice to JSON interface object, with default 2-space indentation
 	err = json.Unmarshal(jsonBytes, &jsonObject)
 	return jsonObject, err
 }
 
+// NOTE: To be replaced by JsonToBytes()
 func Prettify(jsonObject interface{}) (pretty string, err error) {
-	// NOTE: To be replaced by JsonToBytes()
 	j, err := json.MarshalIndent(jsonObject, "", "  ")
 	return string(j), err
 }
 
+// Print JSON object in color
 func PrintJsonColor(jsonObject interface{}) {
-	// Print JSON object in color
 	jsonBytes, err := JsonToBytes(jsonObject)
 	if err != nil {
 		fmt.Println(err.Error())
@@ -151,11 +154,13 @@ func PrintJsonColor(jsonObject interface{}) {
 	PrintJsonBytesColor(jsonBytes)
 }
 
+// Prints JSON byte slice in color. Just an alias of yaml.go:PrintYamlBytesColor().
 func PrintJsonBytesColor(jsonBytes []byte) {
-	// Prints JSON byte slice in color. Just an alias of yaml.go:PrintYamlBytesColor().
 	PrintYamlBytesColor(jsonBytes)
 }
 
+// Combines two string-to-string maps, with keys from the second map overwriting those
+// from the first if duplicates exist. Returns the merged map.
 func MergeMaps(m1, m2 map[string]string) (result map[string]string) {
 	result = map[string]string{}
 	for k, v := range m1 {
@@ -167,11 +172,9 @@ func MergeMaps(m1, m2 map[string]string) (result map[string]string) {
 	return result
 }
 
+// Non-recursive merge of first-level attributes in JSON object y onto object x
+// If attribute exists in y, it is overwritten
 func MergeObjects(x, y map[string]interface{}) (obj map[string]interface{}) {
-	// Merge JSON object y into x
-	// NOTES:
-	// 1. Non-recursive, only works attributes at first level
-	// 2. If attribute exists in y, it is overwritten
 	obj = x
 	for k, v := range x { // Update existing x values with updated y values
 		obj[k] = v
@@ -179,7 +182,7 @@ func MergeObjects(x, y map[string]interface{}) (obj map[string]interface{}) {
 			obj[k] = y[k]
 		}
 	}
-	for k, _ := range y { // Add new y values to x
+	for k := range y { // Add new y values to x
 		if x[k] == nil {
 			obj[k] = y[k]
 		}
@@ -187,8 +190,8 @@ func MergeObjects(x, y map[string]interface{}) (obj map[string]interface{}) {
 	return obj
 }
 
+// Recursive function returns True if filter string value is anywhere within jsonObject
 func StringInJson(jsonObject interface{}, filter string) bool {
-	// Recursive function returns True if filter string value is anywhere within jsonObject
 	switch value := jsonObject.(type) {
 	case string:
 		return SubString(value, filter)

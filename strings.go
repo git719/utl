@@ -1,5 +1,3 @@
-// strings.go
-
 package utl
 
 import (
@@ -7,21 +5,19 @@ import (
 	"strings"
 )
 
+// Case insensitive substring check
 func SubString(large, small string) bool {
-	// Case insensitive substring search
-	if strings.Contains(strings.ToLower(large), strings.ToLower(small)) {
-		return true
-	}
-	return false
+	return strings.Contains(strings.ToLower(large), strings.ToLower(small))
 }
 
+// Split the string and return last element
 func LastElem(s, splitter string) string {
-	split := strings.Split(s, splitter) // Split the string
-	return split[len(split)-1]          // Return last element
+	split := strings.Split(s, splitter)
+	return split[len(split)-1]
 }
 
+// Return first N chars of string n
 func FirstN(s string, n int) string {
-	// Return first N characters of string n
 	if len(s) <= n {
 		return s
 	}
@@ -35,8 +31,8 @@ func FirstN(s string, n int) string {
 	return s
 }
 
+// Return the best printable string value for given x variable
 func Str(x interface{}) string {
-	// Return the best printable string value for given x variable
 	if x == nil {
 		return ""
 	}
@@ -50,9 +46,9 @@ func Str(x interface{}) string {
 	}
 }
 
+// Returns string value of unknown variable, wrapped in single quotes. This is a special
+// function to lookout for leading '*', which YAML does not allow and must be single-quoted
 func StrSingleQuote(x interface{}) string {
-	// Returns string value of unknown variable, wrapped in single quotes
-	// Special function to lookout for leading '*', which YAML does not allow and must be single-quoted
 	s := Str(x)
 	if strings.HasPrefix(s, "*") {
 		return "'" + s + "'"
@@ -60,10 +56,13 @@ func StrSingleQuote(x interface{}) string {
 	return s
 }
 
+// Converts any value to its string representation using default formatting.
 func ToStr(value interface{}) string {
 	return fmt.Sprintf("%v", value)
 }
 
+// ItemInList checks if a given string (arg) is present in a list of strings (argList).
+// Returns true if found, false otherwise.
 func ItemInList(arg string, argList []string) bool {
 	for _, value := range argList {
 		if value == arg {
@@ -73,9 +72,9 @@ func ItemInList(arg string, argList []string) bool {
 	return false
 }
 
+// Return string of spaces for padded printing. Needed when printing terminal colors.
+// Colorize output uses % sequences that conflict with Printf's own formatting with %
 func PadSpaces(targetWidth, stringWidth int) string {
-	// Return string of spaces for padded printing. Needed when printing terminal colors.
-	// Colorize output uses % sequences that conflict with Printf's own formatting with %
 	padding := targetWidth - stringWidth
 	if padding > 0 {
 		return fmt.Sprintf("%*s", padding, " ")
@@ -84,9 +83,9 @@ func PadSpaces(targetWidth, stringWidth int) string {
 	}
 }
 
+// Return value as a string, padded with leading spaces, totalling width size wide. This is
+// needed when printing terminal colors, because they conflict with Printf's own '%' formatting
 func PreSpc(value interface{}, width int) string {
-	// Return value as a string, padded with leading spaces, totalling width
-	// Needed when printing terminal colors, because they conflict with Printf's own '%' formatting
 	str := ToStr(value)
 	padding := width - len(str)
 	if padding > 0 {
@@ -96,9 +95,9 @@ func PreSpc(value interface{}, width int) string {
 	}
 }
 
+// Return value as a string, padded with trailing spaces, totalling width size wide. This is
+// needed when printing terminal colors, because they conflict with Printf's own '%' formatting
 func PostSpc(value interface{}, width int) string {
-	// Return value as a string, padded with trailing spaces, totalling width
-	// Needed when printing terminal colors, because they conflict with Printf's own '%' formatting
 	str := ToStr(value)
 	padding := width - len(str)
 	if padding > 0 {

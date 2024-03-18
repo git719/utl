@@ -1,9 +1,8 @@
-// utils.go
-
 package utl
 
 import (
 	"fmt"
+
 	"github.com/gookit/color"
 )
 
@@ -26,6 +25,8 @@ var (
 	Mag2 = color.FgMagenta.Render
 )
 
+// PrintColorSamples is a dormant function and not actively used anywhere. It is left
+// around for those times when someone wants to test and see what the colors would look like.
 func PrintColorSamples() {
 	fmt.Println("Red  " + Red("!@#$%#$%&#%*^2314897123589"))
 	fmt.Println("Blu  " + Blu("!@#$%#$%&#%*^2314897123589"))

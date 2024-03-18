@@ -1,5 +1,3 @@
-// files.go
-
 package utl
 
 import (
@@ -7,6 +5,8 @@ import (
 	"time"
 )
 
+// Read and recode given filePath as text byte slice.
+// Returns the byte slice and error if any.
 func LoadFileText(filePath string) (rawBytes []byte, err error) {
 	rawBytes, err = os.ReadFile(filePath)
 	if err != nil {
@@ -15,6 +15,8 @@ func LoadFileText(filePath string) (rawBytes []byte, err error) {
 	return rawBytes, nil
 }
 
+// Saves given byte slice as text file.
+// Returns error is any.
 func SaveFileText(filePath string, rawBytes []byte) error {
 	err := os.WriteFile(filePath, rawBytes, 0644)
 	if err != nil {
@@ -23,6 +25,7 @@ func SaveFileText(filePath string, rawBytes []byte) error {
 	return nil
 }
 
+// Removes given filepath
 func RemoveFile(filePath string) {
 	if FileExist(filePath) {
 		if err := os.Remove(filePath); err != nil {
@@ -31,14 +34,15 @@ func RemoveFile(filePath string) {
 	}
 }
 
+// Returns true if filepath exists and has some content. False otherwise.
 func FileUsable(filePath string) (e bool) {
-	// True if file EXISTS && has SOME content
 	if FileExist(filePath) && FileSize(filePath) > 0 {
 		return true
 	}
 	return false
 }
 
+// Returns true if given filePath exists. False otherwise.
 func FileExist(filePath string) (e bool) {
 	if _, err := os.Stat(filePath); err == nil || os.IsExist(err) {
 		return true
@@ -46,6 +50,7 @@ func FileExist(filePath string) (e bool) {
 	return false
 }
 
+// Returns true is given filePath does not exist. False otherwise.
 func FileNotExist(filePath string) (e bool) {
 	if _, err := os.Stat(filePath); os.IsNotExist(err) {
 		return true
@@ -53,6 +58,7 @@ func FileNotExist(filePath string) (e bool) {
 	return false
 }
 
+// Returns size of given filePath as int64
 func FileSize(filePath string) int64 {
 	f, err := os.Stat(filePath)
 	if err != nil {
@@ -61,8 +67,8 @@ func FileSize(filePath string) int64 {
 	return f.Size()
 }
 
+// Returns given filePath modified time in Unix epoch int
 func FileModTime(filePath string) int {
-	// Modified time in Unix epoch
 	f, err := os.Stat(filePath)
 	if err != nil {
 		return 0
@@ -70,8 +76,8 @@ func FileModTime(filePath string) int {
 	return int(f.ModTime().Unix())
 }
 
+// Returns given filePath age in seconds int64
 func FileAge(filePath string) int64 {
-	// Return file age in seconds
 	if FileUsable(filePath) {
 		fileEpoc := int64(FileModTime(filePath))
 		return int64(time.Now().Unix()) - fileEpoc

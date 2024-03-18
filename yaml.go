@@ -1,5 +1,3 @@
-// yaml.go
-
 package utl
 
 import (
@@ -14,8 +12,9 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
+// Trys to read, load, and decode given filePath as some YAML object.
+// Returns YAML object and error if any.
 func LoadFileYaml(filePath string) (yamlObject interface{}, err error) {
-	// Read/load/decode given filePath as some YAML object
 	fileContent, err := os.ReadFile(filePath)
 	if err != nil {
 		return nil, err
@@ -27,6 +26,8 @@ func LoadFileYaml(filePath string) (yamlObject interface{}, err error) {
 	return yamlObject, nil
 }
 
+// Tries to read, load, and recode given filePath as some YAML object as byte slice.
+// Returns YAML object as byte slice. and error if any.
 func LoadFileYamlBytes(filePath string) (yamlBytes []byte, err error) {
 	// Load YAML file into byte slice, including comments
 	// Can also JSON file into byte slice!
@@ -44,8 +45,8 @@ func LoadFileYamlBytes(filePath string) (yamlBytes []byte, err error) {
 	return yamlBytes, nil // We only care about returning the byte slice
 }
 
+// Save given YAML object to given filePath
 func SaveFileYaml(yamlObject interface{}, filePath string) {
-	// Save given YAML object to given filePath
 	yamlData, err := yaml.Marshal(&yamlObject)
 	if err != nil {
 		panic(err.Error())
@@ -56,8 +57,8 @@ func SaveFileYaml(yamlObject interface{}, filePath string) {
 	}
 }
 
+// Convert byte slice to YAML interface object
 func BytesToYamlObject(yamlBytes []byte) (yamlObject interface{}, err error) {
-	// Convert byte slice to YAML interface object
 	buffer := bytes.NewBuffer(yamlBytes)
 	decoder := yaml.NewDecoder(buffer)
 	err = decoder.Decode(&yamlObject)
@@ -67,8 +68,8 @@ func BytesToYamlObject(yamlBytes []byte) (yamlObject interface{}, err error) {
 	return yamlObject, nil
 }
 
+// Convert YAML interface object to byte slice, with option indent spacing
 func YamlToBytesIndent(yamlObject interface{}, indent int) (yamlBytes []byte, err error) {
-	// Convert YAML interface object to byte slice, with option indent spacing
 	buffer := &bytes.Buffer{}
 	encoder := yaml.NewEncoder(buffer)
 	encoder.SetIndent(indent)
@@ -80,15 +81,15 @@ func YamlToBytesIndent(yamlObject interface{}, indent int) (yamlBytes []byte, er
 	return yamlBytes, nil
 }
 
+// With default 2 space indent
 func YamlToBytes(yamlObject interface{}) (yamlBytes []byte, err error) {
-	// With default 2 space indent
 	indent := 2
 	yamlBytes, err = YamlToBytesIndent(yamlObject, indent)
 	return yamlBytes, err
 }
 
+// Print YAML object
 func PrintYaml(yamlObject interface{}) {
-	// Print YAML object
 	yamlBytes, err := YamlToBytes(yamlObject)
 	if err != nil {
 		fmt.Println(err.Error())
@@ -97,6 +98,7 @@ func PrintYaml(yamlObject interface{}) {
 	fmt.Println(string(yamlBytes))
 }
 
+// Colorize given token. Internal helper function.
 func colorizeString(tk *token.Token, src string) string {
 	str := Whi(src)
 	switch tk.Type {
@@ -122,8 +124,8 @@ func colorizeString(tk *token.Token, src string) string {
 	return str
 }
 
+// Print YAML object (that don't usually include comments) in color
 func PrintYamlColor(yamlObject interface{}) {
-	// Print YAML object (that don't usually include comments) in color
 	yamlBytes, err := YamlToBytes(yamlObject)
 	if err != nil {
 		fmt.Println(err.Error())
@@ -132,10 +134,10 @@ func PrintYamlColor(yamlObject interface{}) {
 	PrintYamlBytesColor(yamlBytes)
 }
 
+// Print YAML bytes in color, includes comments
+// Also prints JSON byte slice in color, but use json.go:PrintJsonBytesColor() alias instead.
+// Caller must ensure yamlBytes is proper YAML/JSON
 func PrintYamlBytesColor(yamlBytes []byte) {
-	// Print YAML bytes in color, includes comments
-	// Also prints JSON byte slice in color, but use json.go:PrintJsonBytesColor() alias instead.
-	// Caller must ensure yamlBytes is proper YAML/JSON
 	tokens := lexer.Tokenize(string(yamlBytes))
 	if len(tokens) == 0 {
 		return

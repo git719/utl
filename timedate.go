@@ -1,5 +1,3 @@
-// timedate.go
-
 package utl
 
 import (
@@ -8,24 +6,24 @@ import (
 	"time"
 )
 
+// Return absolute value of int value
 func IntAbs(x int) int {
-	// Return absolute value of int value
 	if x < 0 {
 		return -x
 	}
 	return x
 }
 
+// Returns absolute value of int64 value
 func Int64Abs(x int64) int64 {
-	// Return absolute value of int64 value
 	if x < 0 {
 		return -x
 	}
 	return x
 }
 
+// Converts string number to int64
 func StringToInt64(s string) (int64, error) {
-	// Convert string number to int64
 	i, err := strconv.ParseInt(s, 10, 64)
 	if err != nil {
 		return 0, err
@@ -33,34 +31,33 @@ func StringToInt64(s string) (int64, error) {
 	return i, nil
 }
 
+// Converts int64 number to string
 func Int64ToString(i int64) string {
-	// Convert int64 number to string
 	return strconv.FormatInt(i, 10)
 }
 
+// Check if string is a valid date in expectedFormat. Return true if so, false otherwise.
+// See https://pkg.go.dev/time
 func ValidDate(dateString, expectedFormat string) bool {
-	// Check if string is a valid date in expectedFormat
-	// Reference: https://pkg.go.dev/time
 	_, err := time.Parse(expectedFormat, dateString)
-	if err != nil {
-		return false
-	}
-	return true
+	return err == nil
 }
 
+// Converts an epoch timestamp in int64 format to a time.Time object.
 func EpocInt64ToTime(epocInt int64) time.Time {
-	// Convert Unix epoc seconds string to Time type
 	return time.Unix(epocInt, 0)
 }
 
+// Converts an epoch timestamp in string format to a time.Time object.
+// Returns a time.Time object and an error if the conversion fails.
 func EpocStringToTime(epocString string) (time.Time, error) {
-	// Convert Unix epoc seconds string to Time type
 	epocInt64, err := StringToInt64(epocString)
 	return time.Unix(epocInt64, 0), err
 }
 
+// Converts dateString from source format to destination format.
+// Returns date string in destination format and an error if the conversion fails.
 func ConvertDateFormat(dateString, srcFormat, dstFormat string) (string, error) {
-	// Converts dateString from srcFormat to dstFormat
 	t, err := time.Parse(srcFormat, dateString)
 	if err != nil {
 		return "", err
@@ -68,8 +65,8 @@ func ConvertDateFormat(dateString, srcFormat, dstFormat string) (string, error) 
 	return t.Format(dstFormat), nil
 }
 
+// Convert dateString, given in dateFormat, to Unix Epoc seconds int64
 func DateStringToEpocInt64(dateString, dateFormat string) (int64, error) {
-	// Convert dateString, given in dateFormat, to Unix Epoc seconds int64
 	t, err := time.Parse(dateFormat, dateString) // First, convert string to Time
 	if err != nil {
 		return 0, err
@@ -77,8 +74,8 @@ func DateStringToEpocInt64(dateString, dateFormat string) (int64, error) {
 	return t.Unix(), nil // Finally, convert Time type to Unix epoc seconds
 }
 
+// Print yyyy-mm-dd date for given number of +/- days in future or past
 func GetDateInDays(days string) time.Time {
-	// Print yyyy-mm-dd date for given number of +/- days in future or past
 	now := time.Now().Unix()
 	daysInt64, err := StringToInt64(days)
 	if err != nil {
@@ -88,14 +85,14 @@ func GetDateInDays(days string) time.Time {
 	return EpocInt64ToTime(now)
 }
 
+// Returns true if given year is a leap year. False otherwise.
 func IsLeapYear(year int64) bool {
 	return year%4 == 0 && (year%100 != 0 || year%400 == 0)
 }
 
+// Calculate and return number of +/- days from NOW to date given
+// Note: Calculations are all in UTC time. And it takes leap year into account.
 func GetDaysSinceOrTo(date1 string) int64 {
-	// Calculate and return number of +/- days from NOW to date given
-	// Note: Calculations are all in UTC time
-	// Takes leap year into account.
 	start, err := time.Parse("2006-01-02", date1)
 	if err != nil {
 		panic(err.Error())
@@ -125,8 +122,8 @@ func GetDaysSinceOrTo(date1 string) int64 {
 	return sign * days
 }
 
+// Print number of days, also in years and days
 func PrintDays(days int64) {
-	// Print number of days, also in years and days
 	days_abs := Int64Abs(days)
 	var years int64 = 0
 
@@ -150,8 +147,8 @@ func PrintDays(days int64) {
 	}
 }
 
+// Return number of days between 2 dates
 func GetDaysBetween(date1, date2 string) int64 {
-	// Return number of days between 2 dates
 	epoc1, err := DateStringToEpocInt64(date1, "2006-01-02")
 	if err != nil {
 		panic(err.Error())
